@@ -1,19 +1,26 @@
 name: PriceWatch Daily Check
 on:
   schedule:
-    - cron: '0 9 * * *' # Her gün sabah 09:00'da (UTC) çalışır
+    - cron: '0 9 * * *' # Her gün sabah 09:00'da (UTC) otomatik çalışır
   workflow_dispatch: # Manuel çalıştırmak için buton ekler
 
 jobs:
   check-prices:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - run: npm install
-      - run: node index.js
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Scraper
+        run: node index.js
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
