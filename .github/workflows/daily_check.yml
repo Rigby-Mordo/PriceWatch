@@ -1,8 +1,8 @@
 name: PriceWatch Daily Check
 on:
   schedule:
-    - cron: '0 9 * * *' # Her gün sabah 09:00'da (UTC) otomatik çalışır
-  workflow_dispatch: # Manuel çalıştırmak için buton ekler
+    - cron: '0 9 * * *' # Her gün Türkiye saatiyle öğlen civarı çalışır
+  workflow_dispatch: # Manuel çalıştırmak için bir buton ekler
 
 jobs:
   check-prices:
