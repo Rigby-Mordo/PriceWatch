@@ -21,9 +21,9 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # KRİTİK ADIM: Puppeteer için gerekli Chrome tarayıcısını yükler
+      # GÜNCELLENEN SATIR: Yetki hatasını aşmak için npx ile tam paket adını kullanıyoruz
       - name: Install Puppeteer Browsers
-        run: npx puppeteer browsers install chrome
+        run: npx puppeteer@latest browsers install chrome
 
       - name: Run PriceWatch
         run: node index.js
