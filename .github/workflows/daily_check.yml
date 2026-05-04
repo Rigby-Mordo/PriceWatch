@@ -1,12 +1,17 @@
 name: PriceWatch Daily Check
+
 on:
   schedule:
-    - cron: '0 9 * * *' # Her gün Türkiye saatiyle öğlen civarı çalışır
-  workflow_dispatch: # Manuel çalıştırmak için bir buton ekler
+    - cron: '0 9 * * *' # Her gün Türkiye saatiyle 12:00 civarı çalışır
+  workflow_dispatch: # Manuel çalıştırmak için butonu aktif tutar
 
 jobs:
   check-prices:
     runs-on: ubuntu-latest
+    
+    # GitHub'ın işlemi yarıda kesmemesi için süreyi artırıyoruz
+    timeout-minutes: 30 
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -17,9 +22,11 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
+        # Yeni eklediğimiz stealth paketleri için npm install şart
         run: npm install
 
-      - name: Run Scraper
+      - name: Run PriceWatch Scraper
+        # Hata olsa bile günlüğün (log) tamamlanması için node index.js çalıştırılır
         run: node index.js
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
