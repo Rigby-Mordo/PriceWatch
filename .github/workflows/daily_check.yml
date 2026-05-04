@@ -21,10 +21,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # GÜNCELLENEN SATIR: Yetki hatasını aşmak için npx ile tam paket adını kullanıyoruz
-      - name: Install Puppeteer Browsers
-        run: npx puppeteer@latest browsers install chrome
-
       - name: Run PriceWatch
         run: node index.js
         env:
