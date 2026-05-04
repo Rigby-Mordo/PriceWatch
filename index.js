@@ -7,7 +7,7 @@ require('dotenv').config();
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Bildirimlerin gideceği adres
+// Senin mail adresin buraya sabitlendi
 const KENDI_MAILIM = 'batukilic48@gmail.com'; 
 
 // GLOBAL HR-TECH İZLEME LİSTESİ
@@ -51,7 +51,7 @@ const RAKIPLER = [
 ];
 
 async function rakipIsle(rakip) {
-    console.log(`\n--- [${rakip.ad}] Kontrol Ediliyor ---`);
+    console.log(`\n--- [${rakip.ad}] İşlem Başlıyor ---`);
 
     try {
         // 1. Veritabanında rakibi kontrol et veya oluştur
@@ -68,11 +68,11 @@ async function rakipIsle(rakip) {
         const hamFiyat = await fiyatCek(rakip.url, rakip.selector);
         
         if (!hamFiyat) {
-            throw new Error(`${rakip.ad} sitesinden veri alınamadı (Selector değişmiş veya bot engeli).`);
+            throw new Error(`${rakip.ad} sitesinden veri alınamadı (Bot koruması veya Selector hatası).`);
         }
 
         const yeniFiyat = parseFloat(hamFiyat.replace(/[^0-9.]/g, ""));
-        console.log(`>> Mevcut Fiyat: ${yeniFiyat} ${rakip.paraBirimi}`);
+        console.log(`>> Çekilen Fiyat: ${yeniFiyat} ${rakip.paraBirimi}`);
 
         // 3. Veritabanındaki son kayıtla karşılaştır
         const { data: sonKayit } = await supabase.from('price_history')
@@ -83,7 +83,7 @@ async function rakipIsle(rakip) {
 
         // 4. Değişim varsa kaydet ve mail at
         if (!sonKayit || sonKayit.price_value !== yeniFiyat) {
-            console.log(`>> DEĞİŞİM TESPİT EDİLDİ!`);
+            console.log(`>> DEĞİŞİM VAR! Kaydediliyor...`);
             
             await supabase.from('price_history').insert([{ 
                 competitor_id: rakipId, 
@@ -95,44 +95,25 @@ async function rakipIsle(rakip) {
                 from: 'PriceWatch <onboarding@resend.dev>',
                 to: [KENDI_MAILIM],
                 subject: `🚨 Global HR Alert: ${rakip.ad} Fiyatı Değişti!`,
-                html: `
-                    <h2>Pazar Analizi Bildirimi</h2>
-                    <p><b>${rakip.ad}</b> platformunda fiyat değişimi tespit edildi.</p>
-                    <ul>
-                        <li><b>Yeni Fiyat:</b> ${yeniFiyat} ${rakip.paraBirimi}</li>
-                        <li><b>Eski Fiyat:</b> ${sonKayit ? sonKayit.price_value : 'Veri Yok'} ${rakip.paraBirimi}</li>
-                    </ul>
-                    <p><a href="${rakip.url}">Siteye Git</a></p>
-                `
+                html: `<h3>${rakip.ad} Fiyatı Güncellendi!</h3><p>Yeni: ${yeniFiyat} ${rakip.paraBirimi}</p>`
             });
         } else {
-            console.log(`>> Fiyat stabil.`);
+            console.log(`>> Fiyat aynı, aksiyon alınmadı.`);
         }
 
     } catch (error) {
         console.error(`!! ${rakip.ad} Hatası:`, error.message);
-        // Hata durumunda da bildirim alalım ki sistemin bozulduğunu bilelim
-        await resend.emails.send({
-            from: 'PriceWatch Error <onboarding@resend.dev>',
-            to: [KENDI_MAILIM],
-            subject: `⚠️ Takip Hatası: ${rakip.ad}`,
-            html: `<p><b>${rakip.ad}</b> izlenirken bir hata oluştu: ${error.message}</p>`
-        });
     }
 }
 
 async function baslat() {
-    console.log("==========================================");
-    console.log("PriceWatch Global HR-Tech Edition Başladı");
-    console.log("==========================================");
-    
+    console.log(">> PriceWatch Global HR-Tech Başlatıldı...");
     for (const rakip of RAKIPLER) {
         await rakipIsle(rakip);
-        // Siteler arasında kısa bir bekleme (Bot korumasına karşı önlem)
-        await new Promise(r => setTimeout(r, 3000));
+        // Bot engeline takılmamak için 5 saniye bekleme
+        await new Promise(r => setTimeout(r, 5000)); 
     }
-    
-    console.log("\n--- Tüm Taramalar Başarıyla Tamamlandı ---");
+    console.log("\n--- Tüm Rakipler Kontrol Edildi ---");
 }
 
 baslat();
