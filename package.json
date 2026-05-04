@@ -1,21 +1,17 @@
 {
   "name": "pricewatch",
   "version": "1.0.0",
-  "description": "",
+  "description": "Global HR-Tech Price Watcher",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@supabase/supabase-js": "^2.105.1",
-    "dotenv": "^17.4.2",
-    "puppeteer": "^24.42.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.3.1",
+    "puppeteer": "^21.5.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
-    "resend": "^6.12.2"
+    "resend": "^2.0.0"
+  },
+  "scripts": {
+    "postinstall": "puppeteer browsers install chrome"
   }
 }
