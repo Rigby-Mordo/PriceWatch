@@ -25,9 +25,9 @@ jobs:
         # Yeni eklediğimiz stealth paketleri için npm install şart
         run: npm install
 
-      - name: Run PriceWatch Scraper
-        # Hata olsa bile günlüğün (log) tamamlanması için node index.js çalıştırılır
-        run: node index.js
+      - - name: Run PriceWatch
+      timeout-minutes: 30
+      run: node index.js
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
