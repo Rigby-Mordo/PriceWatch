@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -20,5 +21,16 @@
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "resend": "^6.12.2",
     "stripe": "^22.1.0"
+=======
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.3.1",
+    "puppeteer": "^21.5.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "resend": "^2.0.0"
+>>>>>>> 4c3eb6fe6a57c29f66db4e8e21a8155dc2d8d98c
   }
 }
