@@ -9,34 +9,36 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const KENDI_MAILIM = 'batukilic48@gmail.com';
 
 const RAKIPLER = [
-    {
-        ad: 'Deel (Global EOR)',
-        url: 'https://www.deel.com/pricing',
-        selector: '.pricing-card__price',
+    { 
+        ad: 'Deel (Global EOR)', 
+        url: 'https://www.deel.com/pricing', 
+        // Nokta atışı yerine içinde "price" geçen kapsayıcıyı arıyoruz
+        selector: '[class*="PricingCard_price"], .pricing-card__price, h2', 
         paraBirimi: 'USD'
     },
-    {
-        ad: 'Remote.com (Bordrolama)',
-        url: 'https://remote.com/pricing',
-        selector: '[data-testid="pricing-card-price"]',
+    { 
+        ad: 'Remote.com (Bordrolama)', 
+        url: 'https://remote.com/pricing', 
+        // Data-testid değişmiş olabilir, alternatifleri ekledik
+        selector: 'main [class*="Price"], [data-testid="pricing-card-price"], .pricing-card-price', 
         paraBirimi: 'USD'
     },
-    {
-        ad: 'Lattice (Performans & Bağlılık)',
-        url: 'https://www.lattice.com/pricing',
-        selector: '.pricing-card__amount',
+    { 
+        ad: 'Lattice (Performans & Bağlılık)', 
+        url: 'https://www.lattice.com/pricing', 
+        selector: '.pricing-card__amount, [class*="amount"], h3', 
         paraBirimi: 'USD'
     },
-    {
-        ad: 'SafetyWing (Nomad Sigortası)',
-        url: 'https://safetywing.com/nomad-insurance/pricing',
-        selector: '.price-tag',
+    { 
+        ad: 'SafetyWing (Nomad Sigortası)', 
+        url: 'https://safetywing.com/nomad-insurance/pricing', 
+        selector: '.price-tag, [class*="Price"], span', 
         paraBirimi: 'USD'
     },
-    {
-        ad: 'BetterUp (Çalışan Esenliği)',
-        url: 'https://www.betterup.com/pricing',
-        selector: '.plan-price',
+    { 
+        ad: 'BetterUp (Çalışan Esenliği)', 
+        url: 'https://www.betterup.com/pricing', 
+        selector: '.plan-price, [class*="price"], strong', 
         paraBirimi: 'USD'
     },
     {
